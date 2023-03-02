@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Container,
   Typography,
@@ -17,19 +17,78 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import { GoEye, GoEyeClosed } from "react-icons/go";
+import toast from "react-hot-toast";
+
+const errorStyles = {
+  background: "#ce0000",
+  color: "#fff",
+};
+
+const successStyles = {
+  background: "#00a400",
+  color: "#fff",
+};
 
 const Home = () => {
   const [value, setValue] = useState("1");
   const [showPassword, setShowPassword] = useState(false);
+  const emailList = [];
+  const [signInData, setSignInData] = useState({
+    signInUserName: "",
+    signInPassword: "",
+  });
+  const [signUpData, setSignUpData] = useState({
+    signUpUserName: "",
+    signUpUserEmail: "",
+    signUpPassword: "",
+    signUpConfirmPassword: "",
+  });
+
+  const handleChangeSignInData = (e) => {
+    setSignInData({ ...signInData, [e.target.name]: e.target.value });
+  };
+  const handleChangeSignUpData = (e) => {
+    setSignUpData({ ...signUpData, [e.target.name]: e.target.value });
+  };
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const classes = useStyles();
 
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
+  };
+
+  const [error, setError] = useState({
+    passwordMatched: null,
+    emailExists: false,
+  });
+
+  const handleSignIn = (e) => {
+    e.preventDefault();
+    console.log(signInData);
+    toast.success("Sign in successful!", {
+      style: successStyles,
+    });
+    setSignInData({
+      signInUserName: "",
+      signInPassword: "",
+    });
+  };
+  const handleSignUp = (e) => {
+    e.preventDefault();
+    if (emailList.includes(signUpData.signUpUserEmail)) {
+      toast.error("Email address already taken");
+    } else if (signUpData.signUpPassword !== signUpData.signUpConfirmPassword) {
+      toast.error("Password do not match");
+    } else {
+      toast.success("Signup Successful!!!!!");
+      emailList.push(signUpData.signUpUserEmail);
+      setSignUpData({
+        signUpUserName: "",
+        signUpUserEmail: "",
+        signUpPassword: "",
+        signUpConfirmPassword: "",
+      });
+    }
   };
 
   return (
@@ -57,12 +116,15 @@ const Home = () => {
           </Box>
           <TabPanel value="1">
             <Box>
-              <form>
+              <form onSubmit={handleSignIn}>
                 <TextField
                   variant="outlined"
                   label="User name or Email"
                   fullWidth
                   required
+                  name="signInUserName"
+                  value={signInData.signInUserName}
+                  onChange={handleChangeSignInData}
                   inputProps={{
                     style: { color: "white" },
                   }}
@@ -87,6 +149,9 @@ const Home = () => {
                     id="signin-password"
                     required
                     type={showPassword ? "text" : "password"}
+                    name="signInPassword"
+                    value={signInData.signInPassword}
+                    onChange={handleChangeSignInData}
                     sx={{
                       "& .MuiOutlinedInput-notchedOutline": {
                         borderColor: "#6a6a6a",
@@ -101,7 +166,6 @@ const Home = () => {
                         <IconButton
                           aria-label="toggle password visibility"
                           onClick={handleClickShowPassword}
-                          onMouseDown={handleMouseDownPassword}
                           edge="end"
                         >
                           {showPassword ? (
@@ -129,12 +193,15 @@ const Home = () => {
           </TabPanel>
           <TabPanel value="2">
             <Box>
-              <form>
+              <form onSubmit={handleSignUp}>
                 <TextField
                   variant="outlined"
                   label="User name"
                   fullWidth
                   required
+                  name="signUpUserName"
+                  value={signUpData.signUpUserName}
+                  onChange={handleChangeSignUpData}
                   inputProps={{
                     style: { color: "white" },
                   }}
@@ -154,6 +221,9 @@ const Home = () => {
                   fullWidth
                   required
                   type="email"
+                  name="signUpUserEmail"
+                  value={signUpData.signUpUserEmail}
+                  onChange={handleChangeSignUpData}
                   inputProps={{
                     style: { color: "white" },
                   }}
@@ -179,6 +249,9 @@ const Home = () => {
                     id="sign-up-password"
                     type={showPassword ? "text" : "password"}
                     required
+                    name="signUpPassword"
+                    value={signUpData.signUpPassword}
+                    onChange={handleChangeSignUpData}
                     sx={{
                       "& .MuiOutlinedInput-notchedOutline": {
                         borderColor: "#6a6a6a",
@@ -193,7 +266,6 @@ const Home = () => {
                         <IconButton
                           aria-label="toggle password visibility"
                           onClick={handleClickShowPassword}
-                          onMouseDown={handleMouseDownPassword}
                           edge="end"
                         >
                           {showPassword ? (
@@ -218,6 +290,9 @@ const Home = () => {
                     id="signup-confirm-password"
                     type={showPassword ? "text" : "password"}
                     required
+                    name="signUpConfirmPassword"
+                    value={signUpData.signUpConfirmPassword}
+                    onChange={handleChangeSignUpData}
                     sx={{
                       "& .MuiOutlinedInput-notchedOutline": {
                         borderColor: "#6a6a6a",
@@ -232,7 +307,6 @@ const Home = () => {
                         <IconButton
                           aria-label="toggle password visibility"
                           onClick={handleClickShowPassword}
-                          onMouseDown={handleMouseDownPassword}
                           edge="end"
                         >
                           {showPassword ? (
@@ -273,5 +347,14 @@ const useStyles = makeStyles({
     display: "flex",
     justifyContent: "center",
     flexDirection: "column",
+  },
+  error: {
+    borderRadius: "10px",
+    background: "#ce0000",
+    color: "#fff",
+  },
+  success: {
+    background: "#00a400",
+    color: "#fff",
   },
 });
