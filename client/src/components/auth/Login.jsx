@@ -123,6 +123,9 @@ const Login = () => {
         >
           Sign In
         </Button>
+        <Button color="error" fullWidth variant="contained" type="submit">
+          Sign In as a guest
+        </Button>
       </form>
     </Box>
   );

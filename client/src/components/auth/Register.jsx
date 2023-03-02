@@ -9,6 +9,7 @@ import {
   IconButton,
   Button,
   Input,
+  FormLabel,
 } from "@mui/material";
 import { GoEye, GoEyeClosed } from "react-icons/go";
 import toast from "react-hot-toast";
@@ -29,6 +30,7 @@ const Register = () => {
     signUpUserEmail: "",
     signUpPassword: "",
     signUpConfirmPassword: "",
+    signUpUserImage: null,
   });
   const [showPassword, setShowPassword] = useState(false);
 
@@ -40,10 +42,16 @@ const Register = () => {
       toast.success("Signup Successful!!!!!", { style: successStyles });
     }
   };
+
   const handleChangeSignUpData = (e) => {
     setSignUpData({ ...signUpData, [e.target.name]: e.target.value });
   };
+
   const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleImageUpload = (newFile) => {
+    setSignUpData({ ...signUpData, signUpUserImage: newFile });
+  };
   return (
     <Box>
       <form onSubmit={handleSignUp}>
@@ -171,18 +179,14 @@ const Register = () => {
           />
         </FormControl>
         <Box sx={{ mt: 2 }}>
-          <label htmlFor="contained-button-file">
-            <Input
-              accept="image/*"
-              id="contained-button-file"
-              multiple
-              type="file"
-              style={{ display: "none" }}
-            />
-            <Button variant="contained" component="span">
-              Upload
-            </Button>
-          </label>
+          <FormLabel sx={{ color: "#fff", my: 1 }}>Upload Photo</FormLabel>
+          <Input
+            accept="image/*"
+            id="contained-button-file"
+            multiple
+            type="file"
+            style={{ color: "#aaa" }}
+          />
         </Box>
         <Button
           color="primary"
