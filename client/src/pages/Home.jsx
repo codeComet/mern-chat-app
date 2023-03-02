@@ -8,7 +8,7 @@ import Login from "../components/auth/Login";
 import Register from "../components/auth/Register";
 
 const Home = () => {
-  const [value, setValue] = useState("1");
+  const [value, setValue] = useState("2");
   const classes = useStyles();
 
   const handleChange = (event, newValue) => {
