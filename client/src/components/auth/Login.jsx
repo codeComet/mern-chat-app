@@ -24,7 +24,7 @@ const successStyles = {
 
 const Login = () => {
   const [signInData, setSignInData] = useState({
-    signInUserName: "",
+    signInUserEmail: "",
     signInPassword: "",
   });
 
@@ -47,7 +47,7 @@ const Login = () => {
       style: successStyles,
     });
     setSignInData({
-      signInUserName: "",
+      signInUserEmail: "",
       signInPassword: "",
     });
   };
@@ -57,11 +57,11 @@ const Login = () => {
       <form onSubmit={handleSignIn}>
         <TextField
           variant="outlined"
-          label="User name or Email"
+          label="Email"
           fullWidth
           required
-          name="signInUserName"
-          value={signInData.signInUserName}
+          name="signInUserEmail"
+          value={signInData.signInUserEmail}
           onChange={handleChangeSignInData}
           inputProps={{
             style: { color: "white" },
@@ -123,7 +123,18 @@ const Login = () => {
         >
           Sign In
         </Button>
-        <Button color="error" fullWidth variant="contained" type="submit">
+        <Button
+          color="error"
+          fullWidth
+          variant="contained"
+          type="submit"
+          onClick={() =>
+            setSignInData({
+              signInUserEmail: "demo@user.com",
+              signInPassword: "1234",
+            })
+          }
+        >
           Sign In as a guest
         </Button>
       </form>
