@@ -57,26 +57,19 @@ const Register = () => {
       toast.error("Please upload an image");
       return;
     } else if (photo.type === "image/jpeg" || photo.type === "image/png") {
-      const data = new FormData();
-      data.append("file", photo);
-      data.append("upload_preset", "chat-app");
-      data.append("cloud_name", "bishals-cloud");
-      await fetch(
+      const formData = new FormData();
+      formData.append("file", photo);
+      formData.append("upload_preset", "chat-app");
+      const response = await fetch(
         "https://api.cloudinary.com/v1_1/bishals-cloud/image/upload",
         {
-          method: "post",
-          body: data,
-          mode: "no-cors",
+          method: "POST",
+          body: formData,
         }
-      ).then((res) => console.log(res));
-      // .then((data) => {
-      //   console.log(data);
-      //   setSignUpData({
-      //     ...signUpData,
-      //     signUpUserImage: data.url.toString(),
-      //   });
-      //   setLoading(false);
-      // });
+      );
+      const data = await response.json();
+      setSignUpData({ ...signUpData, signUpUserImage: data.secure_url });
+      setLoading(false);
     } else {
       toast.error("Please upload an image");
       setLoading(false);
