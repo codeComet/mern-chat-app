@@ -33,6 +33,7 @@ const Register = () => {
     signUpUserImage: null,
   });
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleSignUp = (e) => {
     e.preventDefault();
@@ -40,6 +41,7 @@ const Register = () => {
       toast.error("Password do not match", { style: errorStyles });
     } else {
       toast.success("Signup Successful!!!!!", { style: successStyles });
+      console.log(signUpData);
     }
   };
 
@@ -49,8 +51,37 @@ const Register = () => {
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-  const handleImageUpload = (newFile) => {
-    setSignUpData({ ...signUpData, signUpUserImage: newFile });
+  const handleImageUpload = async (photo) => {
+    setLoading(true);
+    if (photo === undefined) {
+      toast.error("Please upload an image");
+      return;
+    } else if (photo.type === "image/jpeg" || photo.type === "image/png") {
+      const data = new FormData();
+      data.append("file", photo);
+      data.append("upload_preset", "chat-app");
+      data.append("cloud_name", "bishals-cloud");
+      await fetch(
+        "https://api.cloudinary.com/v1_1/bishals-cloud/image/upload",
+        {
+          method: "post",
+          body: data,
+          mode: "no-cors",
+        }
+      ).then((res) => console.log(res));
+      // .then((data) => {
+      //   console.log(data);
+      //   setSignUpData({
+      //     ...signUpData,
+      //     signUpUserImage: data.url.toString(),
+      //   });
+      //   setLoading(false);
+      // });
+    } else {
+      toast.error("Please upload an image");
+      setLoading(false);
+      return;
+    }
   };
   return (
     <Box>
@@ -186,6 +217,7 @@ const Register = () => {
             multiple
             type="file"
             style={{ color: "#aaa" }}
+            onChange={(e) => handleImageUpload(e.target.files[0])}
           />
         </Box>
         <Button
@@ -194,6 +226,7 @@ const Register = () => {
           variant="contained"
           sx={{ my: 2 }}
           type="submit"
+          disabled={loading}
         >
           Sign up
         </Button>
