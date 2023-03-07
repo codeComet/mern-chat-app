@@ -69,9 +69,10 @@ const Register = () => {
       );
       const data = await response.json();
       setSignUpData({ ...signUpData, signUpUserImage: data.secure_url });
+      toast.success("Image uploaded successfully!!", { style: successStyles });
       setLoading(false);
     } else {
-      toast.error("Please upload an image");
+      toast.error("Please upload an image", { style: errorStyles });
       setLoading(false);
       return;
     }
@@ -211,6 +212,7 @@ const Register = () => {
             type="file"
             style={{ color: "#aaa" }}
             onChange={(e) => handleImageUpload(e.target.files[0])}
+            required
           />
         </Box>
         <Button

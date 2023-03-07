@@ -9,3 +9,8 @@ body {
   background-attachment: fixed;
   background-size: contain; */
 }
+
+.Mui-disabled {
+  background-color: #283881 !important;
+  color: #a6a6a6 !important;
+}
