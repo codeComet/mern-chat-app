@@ -59,7 +59,7 @@ const Register = () => {
         navigate("/chats");
       } catch (error) {
         console.log(error);
-        toast.error("something went wrong", { style: errorStyles });
+        toast.error(error?.response?.data?.message, { style: errorStyles });
       }
       setLoading(false);
     }
