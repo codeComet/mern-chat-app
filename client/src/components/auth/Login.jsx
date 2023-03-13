@@ -11,6 +11,8 @@ import {
 } from "@mui/material";
 import { GoEye, GoEyeClosed } from "react-icons/go";
 import toast from "react-hot-toast";
+import API from "../../api/api-config";
+import { useNavigate } from "react-router-dom";
 
 const errorStyles = {
   background: "#ce0000",
@@ -27,29 +29,39 @@ const Login = () => {
     signInUserEmail: "",
     signInPassword: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
-
+  const navigate = useNavigate();
   const handleChangeSignInData = (e) => {
     setSignInData({ ...signInData, [e.target.name]: e.target.value });
   };
 
-  const [error, setError] = useState({
-    passwordMatched: null,
-    emailExists: false,
-  });
-
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-  const handleSignIn = (e) => {
+  const handleSignIn = async (e) => {
     e.preventDefault();
-    toast.success("Sign in successful!", {
-      style: successStyles,
-    });
-    setSignInData({
-      signInUserEmail: "",
-      signInPassword: "",
-    });
+    setLoading(true);
+    console.log(signInData);
+    try {
+      const { data } = await API.post("/api/user/signin", {
+        email: signInData.signInUserEmail,
+        password: signInData.signInPassword,
+      });
+      toast.success("Login Successful!!", { style: successStyles });
+      localStorage.setItem("user", JSON.stringify(data));
+      navigate("/chats");
+    } catch (error) {
+      toast.error(
+        error?.response?.data?.message,
+
+        {
+          style: errorStyles,
+        }
+      );
+      console.log(error);
+    }
+    setLoading(false);
   };
 
   return (
@@ -120,6 +132,7 @@ const Login = () => {
           variant="contained"
           sx={{ my: 2 }}
           type="submit"
+          disabled={loading}
         >
           Sign In
         </Button>

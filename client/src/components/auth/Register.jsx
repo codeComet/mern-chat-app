@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import API from "../../api/api-config";
 import {
   Box,
   TextField,
@@ -13,6 +14,7 @@ import {
 } from "@mui/material";
 import { GoEye, GoEyeClosed } from "react-icons/go";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const errorStyles = {
   background: "#ce0000",
@@ -32,16 +34,34 @@ const Register = () => {
     signUpConfirmPassword: "",
     signUpUserImage: null,
   });
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const handleSignUp = (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault();
+
     if (signUpData.signUpPassword !== signUpData.signUpConfirmPassword) {
       toast.error("Password do not match", { style: errorStyles });
+      return;
     } else {
-      toast.success("Signup Successful!!!!!", { style: successStyles });
-      console.log(signUpData);
+      setLoading(true);
+      try {
+        const { data } = await API.post("/api/user/signup", {
+          userName: signUpData.signUpUserName,
+          email: signUpData.signUpUserEmail,
+          password: signUpData.signUpPassword,
+          confirmPassword: signUpData.signUpConfirmPassword,
+          pic: signUpData.signUpUserImage,
+        });
+        toast.success("Signup Successful!!", { style: successStyles });
+        localStorage.setItem("user", JSON.stringify(data));
+        navigate("/chats");
+      } catch (error) {
+        console.log(error);
+        toast.error("something went wrong", { style: errorStyles });
+      }
+      setLoading(false);
     }
   };
 
