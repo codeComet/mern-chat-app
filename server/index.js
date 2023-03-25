@@ -6,6 +6,7 @@ const connectDB = require("./config/db");
 const userRoutes = require("./routes/userRoutes.js");
 
 var bodyParser = require("body-parser");
+const { notFoundHandler, errorHandler } = require("./middlewares/errorHandler");
 
 // parse various different custom JSON types as JSON
 
@@ -33,5 +34,8 @@ app.get("/api/chats/:id", (req, res) => {
 });
 
 app.use("/api/user", userRoutes);
+
+app.use(notFoundHandler);
+app.use(errorHandler);
 
 app.listen(PORT, console.log(`server running on port ${PORT}`));
