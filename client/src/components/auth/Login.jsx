@@ -139,7 +139,6 @@ const Login = () => {
           color="error"
           fullWidth
           variant="contained"
-          type="submit"
           onClick={() =>
             setSignInData({
               signInUserEmail: "demo@user.com",
@@ -147,7 +146,7 @@ const Login = () => {
             })
           }
         >
-          Sign In as a guest
+          Get guest user credentials
         </Button>
       </form>
     </Box>
