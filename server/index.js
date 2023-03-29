@@ -1,12 +1,11 @@
-const express = require("express");
-const { chats } = require("./data/data");
-const dotenv = require("dotenv");
-const cors = require("cors");
-const connectDB = require("./config/db");
-const userRoutes = require("./routes/userRoutes.js");
-
-var bodyParser = require("body-parser");
-const { notFoundHandler, errorHandler } = require("./middlewares/errorHandler");
+import express from "express";
+import chats from "./data/data.js";
+import dotenv from "dotenv";
+import cors from "cors";
+import connectDB from "./config/db.js";
+import userRoutes from "./routes/userRoutes.js";
+import bodyParser from "body-parser";
+import { notFoundHandler, errorHandler } from "./middlewares/errorHandler.js";
 
 // parse various different custom JSON types as JSON
 
