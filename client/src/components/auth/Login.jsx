@@ -42,7 +42,6 @@ const Login = () => {
   const handleSignIn = async (e) => {
     e.preventDefault();
     setLoading(true);
-    console.log(signInData);
     try {
       const { data } = await API.post("/api/user/signin", {
         email: signInData.signInUserEmail,
