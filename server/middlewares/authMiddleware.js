@@ -1,5 +1,5 @@
-const jwt = require("jsonwebtoken");
-const User = require("../models/userModel.js");
+import jwt from "jsonwebtoken";
+import User from "../models/userModel.js";
 
 const authrorized = async (req, res, next) => {
   let token;
@@ -17,6 +17,11 @@ const authrorized = async (req, res, next) => {
       throw new Error("Not authorized");
     }
   }
+
+  if (!token) {
+    res.status(401);
+    throw new Error("Not authorized");
+  }
 };
 
-module.exports = authrorized;
+export default authrorized;

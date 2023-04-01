@@ -70,9 +70,8 @@ export const signIn = async (req, res) => {
     console.log(error);
   }
 };
-<<<<<<< HEAD
 
-const allUsers = async (req, res) => {
+export const allUsers = async (req, res) => {
   const keyword = req.query.search
     ? {
         $or: [
@@ -82,10 +81,9 @@ const allUsers = async (req, res) => {
       }
     : {};
 
-  const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });
+  const users = await User.find(keyword).find({
+    _id: { $ne: req.user._id },
+  });
+
   res.send(users);
 };
-
-module.exports = { signIn, signUp, allUsers };
-=======
->>>>>>> c76af6666320f2210d32ccb78c6a6ba163f4292b
