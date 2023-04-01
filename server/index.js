@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import connectDB from "./config/db.js";
 import userRoutes from "./routes/userRoutes.js";
+import chatRoutes from "./routes/chatRoutes.js";
 import bodyParser from "body-parser";
 import { notFoundHandler, errorHandler } from "./middlewares/errorHandler.js";
 
@@ -23,16 +24,17 @@ app.get("/", function (req, res) {
   res.send("sup, it works");
 });
 
-app.get("/api/chats", (req, res) => {
-  res.send(chats);
-});
+// app.get("/api/chats", (req, res) => {
+//   res.send(chats);
+// });
 
-app.get("/api/chats/:id", (req, res) => {
-  const singleChat = chats.find((chatId) => chatId._id === req.params.id);
-  res.send(singleChat);
-});
+// app.get("/api/chats/:id", (req, res) => {
+//   const singleChat = chats.find((chatId) => chatId._id === req.params.id);
+//   res.send(singleChat);
+// });
 
 app.use("/api/user", userRoutes);
+app.use("/api/chats", chatRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);
